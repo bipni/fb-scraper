@@ -136,6 +136,7 @@ class FacebookScraper:
                         group_post['profile_url'] = extractors.profile_url(soup)
                         group_post['post_time'] = extractors.post_time(soup)
                         group_post['comments'] = extractors.comments(soup, group_post['post_id'])
+                        group_post['comment_count'] = len(group_post['comments'])
                     else:
                         print('No post url found')
 

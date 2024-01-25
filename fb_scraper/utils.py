@@ -4,8 +4,6 @@ import time
 from dateutil import parser
 from requests.cookies import RequestsCookieJar
 
-from fb_scraper.error_handler import error_handler
-
 from .exceptions import InvalidCookies
 
 
@@ -53,6 +51,6 @@ def get_epoch_time(date_string: str):
             epoch_time = int(time.time())
 
         return epoch_time
-    except Exception as error:
-        print(error_handler(error))
+    except Exception:
+        print(f'Error: {date_string}')
         return None

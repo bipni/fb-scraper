@@ -38,15 +38,10 @@ class Extractors:
         try:
             post_text = None
 
-            post = content.find('span', {'class': 'by', 'style': True})
+            post = content.find('div', {'data-ft': True}).find('div', {'data-ft': True})
 
             if post:
                 post_text = post.get_text()
-            else:
-                post = content.find('div', {'data-ft': True})
-
-                if post:
-                    post_text = post.get_text()
 
             return post_text
         except Exception as error:
@@ -174,24 +169,32 @@ class Extractors:
             return None
 
     def comment_id(self, content):
-        comment_id = None
+        try:
+            comment_id = None
 
-        comment = content.get('id')
+            comment = content.get('id')
 
-        if comment:
-            comment_id = comment
+            if comment:
+                comment_id = comment
 
-        return comment_id
+            return comment_id
+        except Exception as error:
+            print(error_handler(error))
+            return None
 
     def comment_text(self, content):
-        comment_text = None
+        try:
+            comment_text = None
 
-        comment = content.find('div').find('div')
+            comment = content.find('div').find('div')
 
-        if comment:
-            comment_text = comment.get_text(strip=True)
+            if comment:
+                comment_text = comment.get_text(strip=True)
 
-        return comment_text
+            return comment_text
+        except Exception as error:
+            print(error_handler(error))
+            return None
 
     def comment_time(self, content):
         try:
