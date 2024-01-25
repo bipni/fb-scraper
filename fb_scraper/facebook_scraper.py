@@ -90,7 +90,6 @@ class FacebookScraper:
     def get_group_posts_by_group_id(self, group_id: str, start_url: str = None):
         try:
             group_posts = []
-            group_post = {}
             url = FB_MBASIC_BASE_URL + '/groups' + f'/{group_id}'
 
             # if start_url, then scrape from start_url
@@ -107,54 +106,42 @@ class FacebookScraper:
             posts = soup.find_all('article')
 
             if posts:
+                print(f'{len(posts)} posts found in this page')
+
                 extractors = Extractors()
 
-                for post in posts:
-                    print('New Post')
+                for i, post in enumerate(posts):
+                    print(f'Post {i+1}')
+                    group_post = {}
 
                     # get all link contents
                     link_contents = post.find_all('a')
 
                     for i, link_content in enumerate(link_contents):
-                        # first link content contains the information of user
-                        if i == 0:
-                            group_post['profile_id'] = extractors.profile_id(link_content)
-                            group_post['profile_name'] = extractors.profile_name(link_content)
-                            group_post['profile_url'] = extractors.profile_url(link_content)
-
                         # link content that contains 'Full Story' text has post url
                         if link_content.get_text(strip=True) == 'Full Story':
                             group_post['post_id'] = extractors.post_id(link_content)
                             group_post['post_url'] = extractors.post_url(link_content)
 
-                    # get all span contents
-                    span_contents = post.find_all('span')
-
-                    for i, span_content in enumerate(span_contents):
-                        # third span content contains the post text
-                        if i == 2:
-                            group_post['post_text'] = extractors.post_text(span_content)
-
-                    if group_post['post_url']:
-                        comments = []
-
+                    if 'post_url' in group_post and group_post['post_url'] is not None:
+                        # get the specific post html response from facebook
                         post_response = self.get(group_post['post_url'])
 
                         soup = BeautifulSoup(post_response, 'html.parser')
 
-                        # if class 'ea' and id exist, then those will be comments
-                        comment_contents = soup.find_all('div', {'class': 'ea', 'id': True})
-
-                        for comment_content in comment_contents:
-                            comment = {}
-                            comment['comment_id'] = extractors.comment_id(comment_content)
-                            comment['comment_text'] = extractors.comment_text(comment_content)
-                            comments.append(comment)
-
-                    group_post['comments'] = comments
+                        group_post['post_text'] = extractors.post_text(soup)
+                        group_post['reaction_count'] = extractors.reaction_count(soup, group_post['post_id'])
+                        group_post['profile_id'] = extractors.profile_id(soup)
+                        group_post['profile_name'] = extractors.profile_name(soup)
+                        group_post['profile_url'] = extractors.profile_url(soup)
+                        group_post['post_time'] = extractors.post_time(soup)
+                        group_post['comments'] = extractors.comments(soup, group_post['post_id'])
+                    else:
+                        print('No post url found')
 
                     group_posts.append(group_post)
-                    group_post = {}
+            else:
+                print('No new posts found')
 
             print(group_posts)
         except Exception as error:
