@@ -1,11 +1,16 @@
 import re
 
+from bs4 import BeautifulSoup
+
 from fb_scraper.constants import FB_MBASIC_BASE_URL
 from fb_scraper.error_handler import error_handler
 from fb_scraper.utils import get_epoch_time
 
 
 class Extractors:
+    def __init__(self, _request) -> None:
+        self.facebook = _request
+
     def post_id(self, content):
         try:
             post_id = None
@@ -152,8 +157,33 @@ class Extractors:
         try:
             comments = []
 
-            section = content.find('div', {'id': f'ufi_{post_id}'})
-            comment_div = section.find_all('div', {'id': re.compile(r'^\d+$')})
+            next_comments = True
+            comment_section = content.find('div', {'id': f'ufi_{post_id}'})
+            aggr_comment_section = content.find('div', {'id': f'ufi_{post_id}'})
+
+            while (next_comments):
+                next_url_div = comment_section.find('div', {'id': f'see_next_{post_id}'})
+
+                if not next_url_div:
+                    break
+
+                next_url = next_url_div.find('a').get('href') if next_url_div.find('a') else None
+
+                if not next_url:
+                    break
+
+                print(next_url)
+                next_response = self.facebook.get(next_url)
+                soup = BeautifulSoup(next_response, 'html.parser')
+                next_comment_section = soup.find('div', {'id': f'ufi_{post_id}'})
+
+                if not next_comment_section:
+                    break
+
+                aggr_comment_section.append(next_comment_section)
+                comment_section = next_comment_section
+
+            comment_div = aggr_comment_section.find_all('div', {'id': re.compile(r'^\d+$')})
 
             for div in comment_div:
                 comment = {}

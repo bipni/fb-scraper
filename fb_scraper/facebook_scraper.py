@@ -30,7 +30,7 @@ class FacebookScraper:
             if posts:
                 print(f'{len(posts)} posts found in this page')
 
-                extractors = Extractors()
+                extractors = Extractors(self.facebook)
 
                 for i, post in enumerate(posts):
                     print(f'Post {i+1}')
@@ -51,12 +51,15 @@ class FacebookScraper:
 
                         soup = BeautifulSoup(post_response, 'html.parser')
 
+                        # post related data
                         group_post['post_text'] = extractors.post_text(soup)
                         group_post['reaction_count'] = extractors.reaction_count(soup, group_post['post_id'])
                         group_post['profile_id'] = extractors.profile_id(soup)
                         group_post['profile_name'] = extractors.profile_name(soup)
                         group_post['profile_url'] = extractors.profile_url(soup)
                         group_post['post_time'] = extractors.post_time(soup)
+
+                        # comment related data
                         group_post['comments'] = extractors.comments(soup, group_post['post_id'])
                         group_post['comment_count'] = len(group_post['comments'])
                     else:

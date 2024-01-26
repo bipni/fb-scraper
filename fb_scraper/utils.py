@@ -52,6 +52,11 @@ def get_epoch_time(date_string: str):
             formatted_yesterday = yesterday.strftime("%Y-%m-%d")
             date_string = date_string.replace('Yesterday', formatted_yesterday)
             epoch_time = int(parser.parse(date_string).timestamp())
+        elif 'Today' in date_string:
+            today = datetime.now()
+            formatted_today = today.strftime("%Y-%m-%d")
+            date_string = date_string.replace('Yesterday', formatted_today)
+            epoch_time = int(parser.parse(date_string).timestamp())
         elif 'at' in date_string:
             epoch_time = int(parser.parse(date_string).timestamp())
         else:
