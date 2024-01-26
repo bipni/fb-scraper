@@ -162,7 +162,7 @@ class Extractors:
             comment_div = content.find('div', {'id': f'ufi_{post_id}'})
             aggr_comment_div = content.find('div', {'id': f'ufi_{post_id}'})
 
-            while (next_comments):
+            while next_comments:
                 next_url_div = comment_div.find('div', {'id': f'see_next_{post_id}'})
 
                 if not next_url_div:

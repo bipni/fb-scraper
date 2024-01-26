@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 
 from fb_scraper.constants import FB_MBASIC_BASE_URL
 from fb_scraper.error_handler import error_handler
+from fb_scraper.exceptions import PrivateGroupError
 from fb_scraper.extractors import Extractors
 
 
@@ -23,6 +24,15 @@ class FacebookScraper:
 
             # parse html
             soup = BeautifulSoup(page_response, 'html.parser')
+
+            # check if group is private
+            header = soup.find('header')
+            p = header.find('p') if header else []
+
+            if p:
+                for i in p:
+                    if 'Private group' == i.get_text():
+                        raise PrivateGroupError("User doesn't belong to this group")
 
             # article tag contains the post
             posts = soup.find_all('article')

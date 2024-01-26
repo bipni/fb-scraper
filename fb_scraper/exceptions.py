@@ -24,3 +24,7 @@ class LoginError(Exception):
 
 class UnexpectedResponse(Exception):
     '''Facebook served something weird'''
+
+
+class PrivateGroupError(Exception):
+    '''User doesn't belong to this group'''
