@@ -1,5 +1,6 @@
 import re
 import time
+from datetime import datetime, timedelta
 
 from dateutil import parser
 from requests.cookies import RequestsCookieJar
@@ -45,6 +46,12 @@ def get_epoch_time(date_string: str):
             match = re.search(r'\d+', date_string)
             minute = int(match.group())
             epoch_time = int(time.time()) - (minute * 60)
+        elif 'Yesterday' in date_string:
+            today = datetime.now()
+            yesterday = today - timedelta(days=1)
+            formatted_yesterday = yesterday.strftime("%Y-%m-%d")
+            date_string = date_string.replace('Yesterday', formatted_yesterday)
+            epoch_time = int(parser.parse(date_string).timestamp())
         elif 'at' in date_string:
             epoch_time = int(parser.parse(date_string).timestamp())
         else:

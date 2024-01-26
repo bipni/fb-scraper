@@ -161,6 +161,7 @@ class Extractors:
                 comment['comment_text'] = self.comment_text(div)
                 comment['comment_time'] = self.comment_time(div)
                 comment['commenter_name'] = self.commenter_name(div)
+                comment['comment_reaction_count'] = self.comment_reaction_count(div)
                 comments.append(comment)
 
             return comments
@@ -222,6 +223,20 @@ class Extractors:
                 commenter_name = comment.get_text()
 
             return commenter_name
+        except Exception as error:
+            print(error_handler(error))
+            return None
+
+    def comment_reaction_count(self, content):
+        try:
+            comment_reaction_count = None
+
+            comment = content.find('a', {'aria-label': True})
+
+            if comment:
+                comment_reaction_count = comment.get_text()
+
+            return comment_reaction_count
         except Exception as error:
             print(error_handler(error))
             return None
