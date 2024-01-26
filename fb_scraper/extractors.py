@@ -172,7 +172,6 @@ class Extractors:
                 if not next_url:
                     break
 
-                print(next_url)
                 next_response = self.facebook.get(next_url)
                 soup = BeautifulSoup(next_response, 'html.parser')
                 next_comment_section = soup.find('div', {'id': f'ufi_{post_id}'})
