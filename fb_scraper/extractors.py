@@ -191,6 +191,8 @@ class Extractors:
                 comment['comment_time'] = self.comment_time(div)
                 comment['commenter_name'] = self.commenter_name(div)
                 comment['comment_reaction_count'] = self.comment_reaction_count(div)
+                comment['replies'] = self.replies(div, post_id, comment['comment_id'])
+                comment['replies_count'] = len(comment['replies'])
                 comments.append(comment)
 
             return comments
@@ -266,6 +268,38 @@ class Extractors:
                 comment_reaction_count = comment.get_text()
 
             return comment_reaction_count
+        except Exception as error:
+            print(error_handler(error))
+            return None
+
+    def replies(self, content, post_id, comment_id):
+        try:
+            replies = []
+            reply_url_div_id = f'comment_replies_more_1:{post_id}_{comment_id}'
+
+            reply_url_div = content.find('div', {'id': reply_url_div_id})
+
+            if reply_url_div:
+                reply_url = reply_url_div.find('a').get('href') if reply_url_div.find('a') else None
+
+                if reply_url:
+                    replies_response = self.facebook.get(FB_MBASIC_BASE_URL + reply_url)
+
+                    soup = BeautifulSoup(replies_response, 'html.parser')
+
+                    reply_div = soup.find_all('div', {'id': re.compile(r'^\d+$')})
+
+                    for div in reply_div:
+                        reply = {}
+                        if comment_id != div.get('id'):
+                            reply['reply_id'] = self.comment_id(div)
+                            reply['reply_text'] = self.comment_text(div)
+                            reply['reply_time'] = self.comment_time(div)
+                            reply['replier_name'] = self.commenter_name(div)
+                            reply['reply_reaction_count'] = self.comment_reaction_count(div)
+                            replies.append(reply)
+
+            return replies
         except Exception as error:
             print(error_handler(error))
             return None
