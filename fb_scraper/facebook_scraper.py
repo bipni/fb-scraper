@@ -27,12 +27,15 @@ class FacebookScraper:
 
             # check if group is private
             header = soup.find('header')
+            # form = soup.find('form', {'method': 'post', 'action': True})
             p = header.find('p') if header else []
 
             if p:
                 for i in p:
                     if 'Private group' == i.get_text():
-                        raise PrivateGroupError("User doesn't belong to this group")
+                        iinput = soup.find(lambda tag: tag.has_attr('value') and tag['value'] in ['Join Group', 'Cancel request'])
+                        if iinput:
+                            raise PrivateGroupError("User doesn't belong to this group")
 
             # article tag contains the post
             posts = soup.find_all('article')
