@@ -15,10 +15,12 @@ from typing import Any, Dict, Iterator, Optional, Set, Union
 from requests.cookies import cookiejar_from_dict
 
 from fb_scraper.exceptions import InvalidCookies
+from fb_scraper.facebook_request import FacebookRequest
 from fb_scraper.facebook_scraper import FacebookScraper
 from fb_scraper.utils import parse_cookie_file
 
-_scraper = FacebookScraper()
+_request = FacebookRequest()
+_scraper = FacebookScraper(_request)
 
 
 def set_cookies(filename: str):
@@ -35,9 +37,9 @@ def set_cookies(filename: str):
         if missing_cookies:
             raise InvalidCookies(f'Missing cookies with name(s): {missing_cookies}')
 
-        _scraper.session.cookies.update(cookies)
+        _request.session.cookies.update(cookies)
 
-        if not _scraper.is_logged_in():
+        if not _request.is_logged_in():
             raise InvalidCookies('Cookies are not valid')
 
 

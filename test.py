@@ -1,6 +1,4 @@
-from fb_scraper import get_group_posts_by_group_id, set_cookies
-
-set_cookies('nila.txt')
+from fb_scraper import get_group_posts_by_group_id
 
 group_id = '140473731634479'
 
