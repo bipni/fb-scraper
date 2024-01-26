@@ -39,6 +39,8 @@ class FacebookScraper:
 
             # article tag contains the post
             posts = soup.find_all('article')
+            next_page_a = soup.find('a', string=lambda s: s and 'See more posts' in s)
+            next_page = FB_MBASIC_BASE_URL + next_page_a.get('href')
 
             if posts:
                 print(f'{len(posts)} posts found in this page')
@@ -82,6 +84,10 @@ class FacebookScraper:
             else:
                 print('No new posts found')
 
-            print(group_posts)
+            data = {
+                'group_posts': group_posts,
+                'next_url': next_page
+            }
+            print(data)
         except Exception as error:
             print(error_handler(error))
