@@ -13,131 +13,132 @@ class Extractors:
 
     def post_id(self, content):
         try:
-            post_id = None
+            value = None
 
-            link = content.get('href')
+            href = content.get('href')
 
-            if link:
-                post_id = link.split('?')[0].split('/')[6]
+            if href:
+                value = href.split('?')[0].split('/')[6]
 
-            return post_id
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def post_url(self, content):
         try:
-            post_url = None
+            value = None
 
-            link = content.get('href')
+            href = content.get('href')
 
-            if link:
-                post_url = link.split('?')[0]
+            if href:
+                value = href.split('?')[0]
 
-            return post_url
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def post_text(self, content):
         try:
-            post_text = None
+            value = None
 
-            post = content.find('div', {'data-ft': True}).find('div', {'data-ft': True})
+            div1 = content.find('div', {'data-ft': True})
 
-            if post:
-                post_text = post.get_text()
+            if div1:
+                div2 = div1.find('div', {'data-ft': True})
 
-            return post_text
+                if div2:
+                    value = div2.get_text()
+                else:
+                    value = div1.get_text()
+
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def reaction_count(self, content, post_id):
         try:
-            reaction_count = None
+            value = None
 
-            reaction = content.find('div', {'id': f'sentence_{post_id}'})
+            div = content.find('div', {'id': f'sentence_{post_id}'})
 
-            if reaction:
-                reaction_count = reaction.get_text()
+            if div:
+                value = div.get_text()
 
-            return reaction_count
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def profile_id(self, content):
         try:
-            profile_id = None
+            value = None
 
-            # first h3 tag contains the user
-            profile_section = content.find('h3')
+            h3 = content.find('h3')
 
-            if profile_section:
-                a_tag = profile_section.find('a')
+            if h3:
+                a = h3.find('a')
 
-                if a_tag:
-                    link = a_tag.get('href')
+                if a:
+                    href = a.get('href')
 
-                    if link:
-                        if '?id' in link:
-                            profile_id = link.split('?id=')[1].split('&')[0]
+                    if href:
+                        if '?id' in href:
+                            value = href.split('?id=')[1].split('&')[0]
                         else:
-                            profile_id = link.split('?')[0].replace('/', '')
+                            value = href.split('?')[0].replace('/', '')
 
-            return profile_id
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def profile_name(self, content):
         try:
-            profile_name = None
+            value = None
 
-            # first h3 tag contains the user
-            profile_section = content.find('h3')
+            h3 = content.find('h3')
 
-            if profile_section:
-                a_tag = profile_section.find('a')
+            if h3:
+                a = h3.find('a')
 
-                if a_tag:
-                    profile_name = a_tag.get_text(strip=True)
+                if a:
+                    value = a.get_text(strip=True)
 
-            return profile_name
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def profile_url(self, content):
         try:
-            profile_url = None
+            value = None
 
-            # first h3 tag contains the user
-            profile_section = content.find('h3')
+            h3 = content.find('h3')
 
-            if profile_section:
-                a_tag = profile_section.find('a')
+            if h3:
+                a = h3.find('a')
 
-                if a_tag:
-                    link = a_tag.get('href')
+                if a:
+                    href = a.get('href')
 
-                    if link:
-                        if '?id' in link:
-                            profile_url = FB_MBASIC_BASE_URL + '/' + link.split('?id=')[1].split('&')[0]
+                    if href:
+                        if '?id' in href:
+                            value = FB_MBASIC_BASE_URL + '/' + href.split('?id=')[1].split('&')[0]
                         else:
-                            profile_url = FB_MBASIC_BASE_URL + link.split('?')[0]
+                            value = FB_MBASIC_BASE_URL + href.split('?')[0]
 
-            return profile_url
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def post_time(self, content):
         try:
-            post_time = None
+            value = None
 
-            # footer tag contains the time
             footer = content.find('footer')
 
             if footer:
@@ -146,43 +147,43 @@ class Extractors:
                 if abbr:
                     date_string = abbr.get_text()
 
-                    post_time = get_epoch_time(date_string)
+                    value = get_epoch_time(date_string)
 
-            return post_time
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def comments(self, content, post_id):
         try:
-            comments = []
+            values = []
 
             next_comments = True
-            comment_section = content.find('div', {'id': f'ufi_{post_id}'})
-            aggr_comment_section = content.find('div', {'id': f'ufi_{post_id}'})
+            comment_div = content.find('div', {'id': f'ufi_{post_id}'})
+            aggr_comment_div = content.find('div', {'id': f'ufi_{post_id}'})
 
             while (next_comments):
-                next_url_div = comment_section.find('div', {'id': f'see_next_{post_id}'})
+                next_url_div = comment_div.find('div', {'id': f'see_next_{post_id}'})
 
                 if not next_url_div:
                     break
 
-                next_url = next_url_div.find('a').get('href') if next_url_div.find('a') else None
+                next_url_href = next_url_div.find('a').get('href') if next_url_div.find('a') else None
 
-                if not next_url:
+                if not next_url_href:
                     break
 
-                next_response = self.facebook.get(next_url)
-                soup = BeautifulSoup(next_response, 'html.parser')
-                next_comment_section = soup.find('div', {'id': f'ufi_{post_id}'})
+                next_page_response = self.facebook.get(next_url_href)
+                soup = BeautifulSoup(next_page_response, 'html.parser')
+                next_comment_div = soup.find('div', {'id': f'ufi_{post_id}'})
 
-                if not next_comment_section:
+                if not next_comment_div:
                     break
 
-                aggr_comment_section.append(next_comment_section)
-                comment_section = next_comment_section
+                aggr_comment_div.append(next_comment_div)
+                comment_div = next_comment_div
 
-            comment_div = aggr_comment_section.find_all('div', {'id': re.compile(r'^\d+$')})
+            comment_div = aggr_comment_div.find_all('div', {'id': re.compile(r'^\d+$')})
 
             for div in comment_div:
                 comment = {}
@@ -190,91 +191,117 @@ class Extractors:
                 comment['comment_text'] = self.comment_text(div)
                 comment['comment_time'] = self.comment_time(div)
                 comment['commenter_name'] = self.commenter_name(div)
+                comment['commenter_url'] = self.commenter_url(div)
                 comment['comment_reaction_count'] = self.comment_reaction_count(div)
                 comment['replies'] = self.replies(div, post_id, comment['comment_id'])
                 comment['replies_count'] = len(comment['replies'])
-                comments.append(comment)
+                values.append(comment)
 
-            return comments
+            return values
         except Exception as error:
             print(error_handler(error))
             return None
 
     def comment_id(self, content):
         try:
-            comment_id = None
+            value = None
 
-            comment = content.get('id')
+            cid = content.get('id')
 
-            if comment:
-                comment_id = comment
+            if cid:
+                value = cid
 
-            return comment_id
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def comment_text(self, content):
         try:
-            comment_text = None
+            value = None
 
-            comment = content.find('div').find('div')
+            div1 = content.find('div')
+            div2 = div1.find('div')
 
-            if comment:
-                comment_text = comment.get_text(strip=True)
+            if div2:
+                value = div2.get_text(strip=True)
 
-            return comment_text
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def comment_time(self, content):
         try:
-            comment_time = None
+            value = None
 
             abbr = content.find('abbr')
 
             if abbr:
                 date_string = abbr.get_text()
 
-                comment_time = get_epoch_time(date_string)
+                value = get_epoch_time(date_string)
 
-            return comment_time
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def commenter_name(self, content):
         try:
-            commenter_name = None
+            value = None
 
-            comment = content.find('h3')
+            h3 = content.find('h3')
 
-            if comment:
-                commenter_name = comment.get_text()
+            if h3:
+                value = h3.get_text()
 
-            return commenter_name
+            return value
+        except Exception as error:
+            print(error_handler(error))
+            return None
+
+    def commenter_url(self, content):
+        try:
+            value = None
+
+            h3 = content.find('h3')
+
+            if h3:
+                a = h3.find('a')
+
+                if a:
+                    href = a.get('href')
+
+                    if href:
+                        if '?id' in href:
+                            value = FB_MBASIC_BASE_URL + '/' + href.split('?id=')[1].split('&')[0]
+                        else:
+                            value = FB_MBASIC_BASE_URL + href.split('?')[0]
+
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def comment_reaction_count(self, content):
         try:
-            comment_reaction_count = None
+            value = None
 
-            comment = content.find('a', {'aria-label': True})
+            a = content.find('a', {'aria-label': True})
 
-            if comment:
-                comment_reaction_count = comment.get_text()
+            if a:
+                value = a.get_text()
 
-            return comment_reaction_count
+            return value
         except Exception as error:
             print(error_handler(error))
             return None
 
     def replies(self, content, post_id, comment_id):
         try:
-            replies = []
+            values = []
+
             reply_url_div_id = f'comment_replies_more_1:{post_id}_{comment_id}'
 
             reply_url_div = content.find('div', {'id': reply_url_div_id})
@@ -296,10 +323,11 @@ class Extractors:
                             reply['reply_text'] = self.comment_text(div)
                             reply['reply_time'] = self.comment_time(div)
                             reply['replier_name'] = self.commenter_name(div)
+                            reply['replier_url'] = self.commenter_url(div)
                             reply['reply_reaction_count'] = self.comment_reaction_count(div)
-                            replies.append(reply)
+                            values.append(reply)
 
-            return replies
+            return values
         except Exception as error:
             print(error_handler(error))
             return None
