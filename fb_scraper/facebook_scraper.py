@@ -88,6 +88,7 @@ class FacebookScraper:
                 'group_posts': group_posts,
                 'next_url': next_page
             }
-            print(data)
+            # print(data)
+            return data
         except Exception as error:
             print(error_handler(error))

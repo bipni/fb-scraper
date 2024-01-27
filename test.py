@@ -5,7 +5,16 @@ group_id = '501370468320789'
 # group_id = '1359582494109955'  # private 769054827223799
 
 
-get_group_posts_by_group_id(group_id=group_id, cookies='nila.txt')
+page = 1
+print(f'Page {page}')
+data = get_group_posts_by_group_id(group_id=group_id, cookies='tuli.txt')
+
+while data['next_url']:
+    page += 1
+    print(f'Page {page}')
+    cookies = 'nila.txt' if page % 2 == 0 else 'tuli.txt'
+    print(f'Cookie: {cookies}')
+    data = get_group_posts_by_group_id(group_id=group_id, cookies=cookies)
 
 # with open('/home/bipni/Documents/fb-scraper/post_details.html', 'w', encoding='utf-8') as file:
 #     file.write(post_response)
