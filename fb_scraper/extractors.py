@@ -67,6 +67,14 @@ class Extractors:
             if div:
                 value = div.get_text()
 
+                if 'k' in value:
+                    match = re.search(r'\d+', value)
+                    value = str(int(match.group()) * 1000)
+
+                if 'm' in value:
+                    match = re.search(r'\d+', value)
+                    value = str(int(match.group()) * 100000)
+
             return value
         except Exception as error:
             print(error_handler(error))
@@ -292,6 +300,14 @@ class Extractors:
 
             if a:
                 value = a.get_text()
+
+                if 'k' in value:
+                    match = re.search(r'\d+', value)
+                    value = str(int(match.group()) * 1000)
+
+                if 'm' in value:
+                    match = re.search(r'\d+', value)
+                    value = str(int(match.group()) * 100000)
 
             return value
         except Exception as error:
