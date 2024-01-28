@@ -43,7 +43,6 @@ class FacebookRequest:
     def is_logged_in(self) -> bool:
         try:
             self.get(self.base_url + '/settings')
-            print('Logged In')
             return True
         except LoginRequired:
             return False

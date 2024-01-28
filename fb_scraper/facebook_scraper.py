@@ -48,7 +48,7 @@ class FacebookScraper:
                 extractors = Extractors(self.facebook)
 
                 for i, post in enumerate(posts):
-                    print(f'Post {i+1}')
+                    print(f'Post {i+1} scraping')
                     group_post = {}
 
                     # get all link contents
