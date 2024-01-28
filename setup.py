@@ -8,7 +8,9 @@ setup(
     packages=find_packages(),
     install_requires=[
         'bs4==0.0.2',
-        'python-dateutil==2.8.2'
+        'python-dateutil==2.8.2',
+        'requests==2.31.0',
+        'requests-html==0.10.0'
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
