@@ -198,6 +198,7 @@ class Extractors:
                 comment['comment_id'] = self.comment_id(div)
                 comment['comment_text'] = self.comment_text(div)
                 comment['comment_time'] = self.comment_time(div)
+                comment['commenter_id'] = self.commenter_id(div)
                 comment['commenter_name'] = self.commenter_name(div)
                 comment['commenter_url'] = self.commenter_url(div)
                 comment['comment_reaction_count'] = self.comment_reaction_count(div)
@@ -292,6 +293,29 @@ class Extractors:
             print(error_handler(error))
             return None
 
+    def commenter_id(self, content):
+        try:
+            value = None
+
+            h3 = content.find('h3')
+
+            if h3:
+                a = h3.find('a')
+
+                if a:
+                    href = a.get('href')
+
+                    if href:
+                        if '?id' in href:
+                            value = href.split('?id=')[1].split('&')[0]
+                        else:
+                            value = href.split('?')[0].replace('/', '')
+
+            return value
+        except Exception as error:
+            print(error_handler(error))
+            return None
+
     def comment_reaction_count(self, content):
         try:
             value = None
@@ -338,6 +362,7 @@ class Extractors:
                             reply['reply_id'] = self.comment_id(div)
                             reply['reply_text'] = self.comment_text(div)
                             reply['reply_time'] = self.comment_time(div)
+                            reply['replier_id'] = self.commenter_id(div)
                             reply['replier_name'] = self.commenter_name(div)
                             reply['replier_url'] = self.commenter_url(div)
                             reply['reply_reaction_count'] = self.comment_reaction_count(div)
