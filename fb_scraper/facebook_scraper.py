@@ -1,9 +1,12 @@
+import re
+
 from bs4 import BeautifulSoup
 
 from fb_scraper.constants import FB_MBASIC_BASE_URL
 from fb_scraper.error_handler import error_handler
 from fb_scraper.exceptions import PrivateGroupError
-from fb_scraper.extractors import Extractors
+from fb_scraper.group_extractors import GroupExtractors
+from fb_scraper.page_extractors import PageExtractors
 
 
 class FacebookScraper:
@@ -45,7 +48,7 @@ class FacebookScraper:
             if posts:
                 print(f'{len(posts)} posts found in this page')
 
-                extractors = Extractors(self.facebook)
+                extractors = GroupExtractors(self.facebook)
 
                 for i, post in enumerate(posts):
                     print(f'Post {i+1} scraping')
@@ -76,7 +79,6 @@ class FacebookScraper:
 
                         # comment related data
                         group_post['comments'] = extractors.comments(soup, group_post['post_id'])
-                        group_post['comment_count'] = len(group_post['comments'])
                     else:
                         print('No post url found')
 
@@ -86,9 +88,88 @@ class FacebookScraper:
 
             data = {
                 'group_posts': group_posts,
+                'next_url': next_page if next_page else None
+            }
+
+            return data
+        except Exception as error:
+            print(error_handler(error))
+
+    def get_page_posts_by_page_id(self, page_id: str, start_url: str = None):
+        try:
+            page_posts = []
+            url = None
+
+            if page_id.isnumeric():
+                # https://mbasic.facebook.com/profile.php?id=100077515030449&v=timeline
+                url = FB_MBASIC_BASE_URL + '/profile.php?id=' + f'{page_id}&v=timeline'
+            else:
+                # https://mbasic.facebook.com/earkidotcom?v=timeline
+                url = FB_MBASIC_BASE_URL + f'/{page_id}?v=timeline'
+
+            # if start_url, then scrape from start_url
+            if start_url is not None:
+                url = start_url
+
+            # get the html response from facebook
+            page_response = self.facebook.get(url)
+
+            # parse html
+            soup = BeautifulSoup(page_response, 'html.parser')
+
+            # article tag contains the post
+            posts = soup.find_all('article')
+            next_page_a = soup.find('a', string=lambda s: s and 'See more stories' in s)
+            next_page = FB_MBASIC_BASE_URL + next_page_a.get('href')
+
+            if posts:
+                print(f'{len(posts)} posts found in this page')
+
+                extractors = PageExtractors(self.facebook)
+
+                for i, post in enumerate(posts):
+                    print(f'Post {i+1} scraping')
+                    page_post = {}
+
+                    # get all link contents
+                    link_contents = post.find_all('a')
+
+                    for i, link_content in enumerate(link_contents):
+                        # link content that contains 'Full Story' text has post url
+                        if link_content.get_text(strip=True) == 'Full Story':
+                            page_post['post_url'] = FB_MBASIC_BASE_URL + extractors.post_url(link_content)
+
+                    if 'post_url' in page_post and page_post['post_url'] is not None:
+                        # get the specific post html response from facebook
+                        post_response = self.facebook.get(page_post['post_url'])
+
+                        soup = BeautifulSoup(post_response, 'html.parser')
+
+                        story_id = re.search(r'story_fbid=([a-zA-Z0-9]+)', page_post['post_url']).group(1)
+
+                        # post related data
+                        page_post['post_id'] = extractors.post_id(soup)
+                        page_post['post_text'] = extractors.post_text(soup)
+                        page_post['reaction_count'] = extractors.reaction_count(soup, story_id)
+                        # page_post['profile_id'] = extractors.profile_id(soup)
+                        # page_post['profile_name'] = extractors.profile_name(soup)
+                        # page_post['profile_url'] = extractors.profile_url(soup)
+                        page_post['post_time'] = extractors.post_time(soup)
+
+                        # comment related data
+                        page_post['comments'] = extractors.comments(soup, story_id, page_post['post_id'])
+                    else:
+                        print('No post url found')
+
+                    page_posts.append(page_post)
+            else:
+                print('No new posts found')
+
+            data = {
+                'page_posts': page_posts,
                 'next_url': next_page
             }
-            # print(data)
+
             return data
         except Exception as error:
             print(error_handler(error))

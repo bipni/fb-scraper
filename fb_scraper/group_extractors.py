@@ -7,7 +7,7 @@ from fb_scraper.error_handler import error_handler
 from fb_scraper.utils import get_epoch_time
 
 
-class Extractors:
+class GroupExtractors:
     def __init__(self, _request) -> None:
         self.facebook = _request
 
@@ -203,7 +203,6 @@ class Extractors:
                 comment['commenter_url'] = self.commenter_url(div)
                 comment['comment_reaction_count'] = self.comment_reaction_count(div)
                 comment['replies'] = self.replies(div, post_id, comment['comment_id'])
-                comment['replies_count'] = len(comment['replies'])
                 values.append(comment)
 
             return values

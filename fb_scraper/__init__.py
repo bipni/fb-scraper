@@ -7,7 +7,7 @@ _request = FacebookRequest()
 _scraper = FacebookScraper(_request)
 
 
-def set_cookies(filename: str):
+def _set_cookies(filename: str):
     try:
         cookies = parse_cookie_file(filename)
     except ValueError as error:
@@ -28,6 +28,12 @@ def set_cookies(filename: str):
 
 
 def get_group_posts_by_group_id(group_id: str, cookies: str, start_url: str = None):
-    set_cookies(cookies)
+    _set_cookies(cookies)
 
     return _scraper.get_group_posts_by_group_id(group_id, start_url)
+
+
+def get_page_posts_by_page_id(page_id: str, cookies: str, start_url: str = None):
+    _set_cookies(cookies)
+
+    return _scraper.get_page_posts_by_page_id(page_id, start_url)
