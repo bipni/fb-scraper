@@ -151,9 +151,6 @@ class FacebookScraper:
                         page_post['post_id'] = extractors.post_id(soup)
                         page_post['post_text'] = extractors.post_text(soup)
                         page_post['reaction_count'] = extractors.reaction_count(soup, story_id)
-                        # page_post['profile_id'] = extractors.profile_id(soup)
-                        # page_post['profile_name'] = extractors.profile_name(soup)
-                        # page_post['profile_url'] = extractors.profile_url(soup)
                         page_post['post_time'] = extractors.post_time(soup)
 
                         # comment related data
