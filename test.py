@@ -1,14 +1,18 @@
-from fb_scraper import get_group_posts_by_group_id, get_page_posts_by_page_id
+from fb_scraper import (
+    get_group_posts_by_group_id,
+    get_page_posts_by_page_id,
+    get_profile,
+)
 
-group_id = '140473731634479'
+# group_id = '140473731634479'
 # group_id = '501370468320789'
 # group_id = '1359582494109955'  # private 769054827223799
 
 
-page = 1
-print(f'Page {page}')
-data = get_group_posts_by_group_id(group_id=group_id, cookies='keye.txt')
-print(data)
+# page = 1
+# print(f'Page {page}')
+# data = get_group_posts_by_group_id(group_id=group_id, cookies='keye.txt')
+# print(data)
 
 # while data['next_url']:
 #     page += 1
@@ -23,7 +27,14 @@ print(data)
 # https://mbasic.facebook.com/earkidotcom?v=timeline
 
 # page_id = '100077515030449'
-page_id = 'earkidotcom'
+# page_id = 'earkidotcom'
 
-data = get_page_posts_by_page_id(page_id=page_id, cookies='tuli.txt', start_url=None)
+# data = get_page_posts_by_page_id(page_id=page_id, cookies='tuli.txt', start_url=None)
+# print(data)
+
+# profile_id = '100089632299605'  # locked profile
+# profile_id = '100069502939023'  # about
+profile_id = 'mirjawakil'
+
+data = get_profile(profile_id=profile_id, cookies='tuli.txt')
 print(data)

@@ -7,6 +7,7 @@ from fb_scraper.error_handler import error_handler
 from fb_scraper.exceptions import PrivateGroupError
 from fb_scraper.group_extractors import GroupExtractors
 from fb_scraper.page_extractors import PageExtractors
+from fb_scraper.profile_extractors import ProfileExtractors
 
 
 class FacebookScraper:
@@ -168,5 +169,56 @@ class FacebookScraper:
             }
 
             return data
+        except Exception as error:
+            print(error_handler(error))
+
+    def get_profile(self, profile_id: str):
+        try:
+            profile_info = {}
+            url = None
+
+            if profile_id.isnumeric():
+                # https://mbasic.facebook.com/profile.php?id=100077515030449
+                url = FB_MBASIC_BASE_URL + '/profile.php?id=' + f'{profile_id}'
+            else:
+                # https://mbasic.facebook.com/earkidotcom
+                url = FB_MBASIC_BASE_URL + f'/{profile_id}'
+
+            # get the html response from facebook
+            profile_response = self.facebook.get(url)
+
+            soup = BeautifulSoup(profile_response, 'html.parser')
+
+            extractors = ProfileExtractors(self.facebook)
+
+            profile_info['name'] = extractors.name(soup)
+
+            if 'locked her profile' in str(profile_response) or 'locked his profile' in str(profile_response):
+                print('This profile is locked')
+                return profile_info
+
+            a_tags = soup.find_all('a')
+
+            if a_tags:
+                for a in a_tags:
+                    if 'About' in a.get_text():
+                        href = FB_MBASIC_BASE_URL + a.get('href')
+                        print(href)
+                        about_response = self.facebook.get(href)
+                        soup = BeautifulSoup(about_response, 'html.parser')
+
+            profile_info['category'] = extractors.category(soup)
+            profile_info['education'] = extractors.education(soup)
+            profile_info['work'] = extractors.work(soup)
+            profile_info['living'] = extractors.living(soup)
+            profile_info['contact_info'] = extractors.contact_info(soup)
+            profile_info['basic_info'] = extractors.basic_info(soup)
+            profile_info['other_names'] = extractors.other_names(soup)
+            profile_info['relationship'] = extractors.relationship(soup)
+            profile_info['life_events'] = extractors.life_events(soup)
+            profile_info['about'] = extractors.about(soup)
+            profile_info['favorite_quote'] = extractors.favorite_quote(soup)
+
+            return profile_info
         except Exception as error:
             print(error_handler(error))

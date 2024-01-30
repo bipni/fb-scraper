@@ -37,3 +37,9 @@ def get_page_posts_by_page_id(page_id: str, cookies: str, start_url: str = None)
     _set_cookies(cookies)
 
     return _scraper.get_page_posts_by_page_id(page_id, start_url)
+
+
+def get_profile(profile_id: str, cookies: str):
+    _set_cookies(cookies)
+
+    return _scraper.get_profile(profile_id)
