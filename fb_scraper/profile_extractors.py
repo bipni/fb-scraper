@@ -127,8 +127,12 @@ class ProfileExtractors:
 
                     if tds:
                         key = tds[0].get_text().lower()
+
+                        if key not in section:
+                            section[key] = []
+
                         text = tds[1].get_text()
-                        section[key] = text
+                        section[key].append(text)
 
                 value = section
 
@@ -217,7 +221,8 @@ class ProfileExtractors:
             div2 = div1.find('div') if div1 is not None else None
             header = div2.find('header') if div2 is not None else None
             div3 = header.find_next_sibling('div') if header is not None else None
-            top_level_divs = div3.find_all('div', recursive=False) if div3 is not None else None
+            div4 = div3.find('div') if div3 is not None else None
+            top_level_divs = div4.find_all('div', recursive=False) if div4 is not None else None
             divs = [div for div in top_level_divs if div.get_text(strip=True)] if top_level_divs is not None else None
 
             if divs and len(divs):

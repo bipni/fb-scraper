@@ -34,7 +34,7 @@ from fb_scraper import (
 
 # profile_id = '100089632299605'  # locked profile
 # profile_id = '100069502939023'  # about
-profile_id = '100090975546293'
+profile_id = 'mirjawakil'
 
 data = get_profile(profile_id=profile_id, cookies='tuli.txt')
 print(data)
