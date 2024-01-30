@@ -173,7 +173,7 @@ class PageExtractors:
             aggr_comment_div = content.find('div', {'id': f'ufi_{story_id}'})
 
             while next_comments:
-                next_url_div = comment_div.find('div', {'id': f'see_next_{story_id}'})
+                next_url_div = comment_div.find('div', {'id': f'see_next_{story_id}'}) if comment_div is not None else None
 
                 if not next_url_div:
                     break
