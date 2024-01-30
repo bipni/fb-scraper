@@ -75,12 +75,23 @@ class ProfileExtractors:
         try:
             value = None
 
-            div = content.find('div', {'id': 'living'})
+            div1 = content.find('div', {'id': 'living'})
+            div2 = div1.find('div') if div1 is not None else None
+            header = div2.find('header') if div2 is not None else None
+            div3 = header.find_next_sibling('div') if header is not None else None
+            divs = div3.find_all('div') if div3 is not None else None
 
-            if div:
-                text = div.get_text(separator=',')
+            if len(divs):
+                section = {}
+                for div in divs:
+                    tds = div.find_all('td', {'valign': True})
 
-                value = text.replace('Places lived,', '')
+                    if tds:
+                        key = tds[0].get_text().lower()
+                        text = tds[1].get_text()
+                        section[key] = text
+
+                value = section
 
             return value
         except Exception as error:
@@ -91,12 +102,23 @@ class ProfileExtractors:
         try:
             value = None
 
-            div = content.find('div', {'id': 'contact-info'})
+            div1 = content.find('div', {'id': 'contact-info'})
+            div2 = div1.find('div') if div1 is not None else None
+            header = div2.find('header') if div2 is not None else None
+            div3 = header.find_next_sibling('div') if header is not None else None
+            divs = div3.find_all('div') if div3 is not None else None
 
-            if div:
-                text = div.get_text(separator=',')
+            if len(divs):
+                section = {}
+                for div in divs:
+                    tds = div.find_all('td', {'valign': True})
 
-                value = text.replace('Contact info,', '')
+                    if tds:
+                        key = tds[0].get_text().lower()
+                        text = tds[1].get_text()
+                        section[key] = text
+
+                value = section
 
             return value
         except Exception as error:
@@ -116,7 +138,6 @@ class ProfileExtractors:
             if len(divs):
                 section = {}
                 for div in divs:
-                    print(div)
                     tds = div.find_all('td', {'valign': True})
 
                     if tds:
