@@ -43,12 +43,18 @@ class ProfileExtractors:
         try:
             value = None
 
-            div = content.find('div', {'id': 'education'})
+            div1 = content.find('div', {'id': 'education'})
+            div2 = div1.find('div') if div1 is not None else None
+            header = div2.find('header') if div2 is not None else None
+            div3 = header.find_next_sibling('div') if header is not None else None
+            divs = div3.find_all('div', recursive=False) if div3 is not None else None
 
-            if div:
-                text = div.get_text(separator=',')
+            if divs and len(divs):
+                section = []
+                for div in divs:
+                    section.append(div.get_text(separator=','))
 
-                value = text.replace('Education,', '')
+                value = section
 
             return value
         except Exception as error:
@@ -59,12 +65,18 @@ class ProfileExtractors:
         try:
             value = None
 
-            div = content.find('div', {'id': 'work'})
+            div1 = content.find('div', {'id': 'work'})
+            div2 = div1.find('div') if div1 is not None else None
+            header = div2.find('header') if div2 is not None else None
+            div3 = header.find_next_sibling('div') if header is not None else None
+            divs = div3.find_all('div', recursive=False) if div3 is not None else None
 
-            if div:
-                text = div.get_text(separator=',')
+            if divs and len(divs):
+                section = []
+                for div in divs:
+                    section.append(div.get_text(separator=','))
 
-                value = text.replace('Work,', '')
+                value = section
 
             return value
         except Exception as error:
@@ -79,9 +91,9 @@ class ProfileExtractors:
             div2 = div1.find('div') if div1 is not None else None
             header = div2.find('header') if div2 is not None else None
             div3 = header.find_next_sibling('div') if header is not None else None
-            divs = div3.find_all('div') if div3 is not None else None
+            divs = div3.find_all('div', recursive=False) if div3 is not None else None
 
-            if len(divs):
+            if divs and len(divs):
                 section = {}
                 for div in divs:
                     tds = div.find_all('td', {'valign': True})
@@ -106,9 +118,9 @@ class ProfileExtractors:
             div2 = div1.find('div') if div1 is not None else None
             header = div2.find('header') if div2 is not None else None
             div3 = header.find_next_sibling('div') if header is not None else None
-            divs = div3.find_all('div') if div3 is not None else None
+            divs = div3.find_all('div', recursive=False) if div3 is not None else None
 
-            if len(divs):
+            if divs and len(divs):
                 section = {}
                 for div in divs:
                     tds = div.find_all('td', {'valign': True})
@@ -133,9 +145,9 @@ class ProfileExtractors:
             div2 = div1.find('div') if div1 is not None else None
             header = div2.find('header') if div2 is not None else None
             div3 = header.find_next_sibling('div') if header is not None else None
-            divs = div3.find_all('div') if div3 is not None else None
+            divs = div3.find_all('div', recursive=False) if div3 is not None else None
 
-            if len(divs):
+            if divs and len(divs):
                 section = {}
                 for div in divs:
                     tds = div.find_all('td', {'valign': True})
@@ -155,13 +167,27 @@ class ProfileExtractors:
         try:
             value = None
 
-            div = content.find('div', {'id': 'nicknames'})
+            div1 = content.find('div', {'id': 'nicknames'})
+            div2 = div1.find('div') if div1 is not None else None
+            header = div2.find('header') if div2 is not None else None
+            div3 = header.find_next_sibling('div') if header is not None else None
+            divs = div3.find_all('div', recursive=False) if div3 is not None else None
 
-            if div:
-                text = div.get_text(separator=',')
+            if divs and len(divs):
+                section = {}
+                for div in divs:
+                    tds = div.find_all('td', {'valign': True})
 
-                value = text.replace('Other names,', '')
+                    if tds:
+                        key = tds[0].get_text().lower()
 
+                        if key not in section:
+                            section[key] = []
+
+                        text = tds[1].get_text()
+                        section[key].append(text)
+
+                value = section
             return value
         except Exception as error:
             print(error_handler(error))
@@ -187,12 +213,19 @@ class ProfileExtractors:
         try:
             value = None
 
-            div = content.find('div', {'id': 'year-overviews'})
+            div1 = content.find('div', {'id': 'year-overviews'})
+            div2 = div1.find('div') if div1 is not None else None
+            header = div2.find('header') if div2 is not None else None
+            div3 = header.find_next_sibling('div') if header is not None else None
+            top_level_divs = div3.find_all('div', recursive=False) if div3 is not None else None
+            divs = [div for div in top_level_divs if div.get_text(strip=True)] if top_level_divs is not None else None
 
-            if div:
-                text = div.get_text(separator=',')
+            if divs and len(divs):
+                section = []
+                for div in divs:
+                    section.append(div.get_text(separator=','))
 
-                value = text.replace('Life events,', '')
+                value = section
 
             return value
         except Exception as error:
