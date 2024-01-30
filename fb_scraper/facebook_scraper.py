@@ -194,8 +194,9 @@ class FacebookScraper:
             profile_info['name'] = extractors.name(soup)
 
             if 'locked her profile' in str(profile_response) or 'locked his profile' in str(profile_response):
-                print('This profile is locked')
-                return profile_info
+                profile_info['locked'] = True
+            else:
+                profile_info['locked'] = False
 
             a_tags = soup.find_all('a')
 
