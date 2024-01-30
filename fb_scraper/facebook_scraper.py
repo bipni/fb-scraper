@@ -146,7 +146,10 @@ class FacebookScraper:
 
                         soup = BeautifulSoup(post_response, 'html.parser')
 
-                        story_id = re.search(r'story_fbid=([a-zA-Z0-9]+)', page_post['post_url']).group(1)
+                        match = re.search(r'story_fbid=([a-zA-Z0-9]+)', page_post['post_url'])
+
+                        if match:
+                            story_id = match.group(1)
 
                         # post related data
                         page_post['post_id'] = extractors.post_id(soup)
