@@ -43,7 +43,8 @@ class FacebookScraper:
 
             # article tag contains the post
             posts = soup.find_all('article')
-            next_page_a = soup.find('a', string=lambda s: s and 'See more posts' in s)
+            next_page_as = soup.find_all('a', string=lambda s: s and 'See more posts' in s)
+            next_page_a = next_page_as[-1] if next_page_as else None
             next_page = FB_MBASIC_BASE_URL + next_page_a.get('href') if next_page_a else None
 
             if posts:
