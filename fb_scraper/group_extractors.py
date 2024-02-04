@@ -67,11 +67,11 @@ class GroupExtractors:
             if div:
                 value = div.get_text()
 
-                if 'k' in value:
+                if re.search(r'\d+[kK]', value):
                     match = re.search(r'\d+', value)
                     value = str(int(match.group()) * 1000)
 
-                if 'm' in value:
+                if re.search(r'\d+[mM]', value):
                     match = re.search(r'\d+', value)
                     value = str(int(match.group()) * 100000)
 
@@ -324,11 +324,11 @@ class GroupExtractors:
             if a:
                 value = a.get_text()
 
-                if 'k' in value:
+                if re.search(r'\d+[kK]', value):
                     match = re.search(r'\d+', value)
                     value = str(int(match.group()) * 1000)
 
-                if 'm' in value:
+                if re.search(r'\d+[mM]', value):
                     match = re.search(r'\d+', value)
                     value = str(int(match.group()) * 100000)
 
