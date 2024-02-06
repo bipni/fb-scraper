@@ -1,4 +1,6 @@
+import random
 import re
+import time
 
 from bs4 import BeautifulSoup
 
@@ -181,6 +183,9 @@ class GroupExtractors:
                 if not next_url_href:
                     break
 
+                print('Getting Comments')
+                random_number = random.randint(2, 6)
+                time.sleep(random_number)
                 next_page_response = self.facebook.get(next_url_href)
                 soup = BeautifulSoup(next_page_response, 'html.parser')
                 next_comment_div = soup.find('div', {'id': f'ufi_{post_id}'})
@@ -349,6 +354,9 @@ class GroupExtractors:
                 reply_url = reply_url_div.find('a').get('href') if reply_url_div.find('a') else None
 
                 if reply_url:
+                    print('Getting Replies')
+                    random_number = random.randint(2, 6)
+                    time.sleep(random_number)
                     replies_response = self.facebook.get(FB_MBASIC_BASE_URL + reply_url)
 
                     soup = BeautifulSoup(replies_response, 'html.parser')
