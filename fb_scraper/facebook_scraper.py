@@ -1,4 +1,6 @@
+import random
 import re
+import time
 
 from bs4 import BeautifulSoup
 
@@ -114,6 +116,8 @@ class FacebookScraper:
                 url = start_url
 
             # get the html response from facebook
+            random_number = random.randint(2, 6)
+            time.sleep(random_number)
             page_response = self.facebook.get(url)
 
             # parse html
