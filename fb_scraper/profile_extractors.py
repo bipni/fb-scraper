@@ -1,4 +1,4 @@
-from fb_scraper.error_handler import error_handler
+from errorify import errorify
 
 
 class ProfileExtractors:
@@ -20,7 +20,7 @@ class ProfileExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def category(self, content):
@@ -36,7 +36,7 @@ class ProfileExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def education(self, content):
@@ -58,7 +58,7 @@ class ProfileExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def work(self, content):
@@ -80,7 +80,7 @@ class ProfileExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def living(self, content):
@@ -107,7 +107,7 @@ class ProfileExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def contact_info(self, content):
@@ -138,7 +138,7 @@ class ProfileExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def basic_info(self, content):
@@ -164,7 +164,7 @@ class ProfileExtractors:
                 value = section
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def other_names(self, content):
@@ -194,7 +194,7 @@ class ProfileExtractors:
                 value = section
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def relationship(self, content):
@@ -210,7 +210,7 @@ class ProfileExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def life_events(self, content):
@@ -234,7 +234,7 @@ class ProfileExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def about(self, content):
@@ -250,7 +250,7 @@ class ProfileExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def favorite_quote(self, content):
@@ -266,5 +266,5 @@ class ProfileExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None

@@ -3,9 +3,9 @@ import re
 import time
 
 from bs4 import BeautifulSoup
+from errorify import errorify
 
 from fb_scraper.constants import FB_MBASIC_BASE_URL
-from fb_scraper.error_handler import error_handler
 from fb_scraper.exceptions import PrivateGroupError
 from fb_scraper.group_extractors import GroupExtractors
 from fb_scraper.page_extractors import PageExtractors
@@ -99,7 +99,7 @@ class FacebookScraper:
 
             return data
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
 
     def get_page_posts_by_page_id(self, page_id: str, start_url: str = None):
         try:
@@ -180,7 +180,7 @@ class FacebookScraper:
 
             return data
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
 
     def get_profile(self, profile_id: str):
         try:
@@ -232,4 +232,4 @@ class FacebookScraper:
 
             return profile_info
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))

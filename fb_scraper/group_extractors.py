@@ -3,9 +3,9 @@ import re
 import time
 
 from bs4 import BeautifulSoup
+from errorify import errorify
 
 from fb_scraper.constants import FB_MBASIC_BASE_URL
-from fb_scraper.error_handler import error_handler
 from fb_scraper.utils import get_epoch_time
 
 
@@ -24,7 +24,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def post_url(self, content):
@@ -38,7 +38,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def post_text(self, content):
@@ -57,7 +57,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def reaction_count(self, content, post_id):
@@ -79,7 +79,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def profile_id(self, content):
@@ -102,7 +102,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def profile_name(self, content):
@@ -119,7 +119,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def profile_url(self, content):
@@ -142,7 +142,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def post_time(self, content):
@@ -161,7 +161,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def comments(self, content, post_id):
@@ -212,7 +212,7 @@ class GroupExtractors:
 
             return values
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def comment_id(self, content):
@@ -226,7 +226,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def comment_text(self, content):
@@ -241,7 +241,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def comment_time(self, content):
@@ -257,7 +257,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def commenter_name(self, content):
@@ -271,7 +271,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def commenter_url(self, content):
@@ -294,7 +294,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def commenter_id(self, content):
@@ -317,7 +317,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def comment_reaction_count(self, content):
@@ -339,7 +339,7 @@ class GroupExtractors:
 
             return value
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
 
     def replies(self, content, post_id, comment_id):
@@ -377,5 +377,5 @@ class GroupExtractors:
 
             return values
         except Exception as error:
-            print(error_handler(error))
+            print(errorify(error))
             return None
