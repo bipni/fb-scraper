@@ -1,3 +1,5 @@
+import random
+import time
 import warnings
 
 from errorify import errorify
@@ -124,6 +126,9 @@ class FacebookRequest:
 
     def get(self, url, **kwargs):
         try:
+            interval = random.randint(0, 11)
+            time.sleep(interval)
+
             if len(self.cookies) == 0:
                 raise RottenCookies('All Cookies are Rotten')
 
