@@ -127,6 +127,7 @@ class FacebookRequest:
     def get(self, url, **kwargs):
         try:
             interval = random.randint(0, 11)
+            print(f'Waiting time for next request: {interval} seconds')
             time.sleep(interval)
 
             if len(self.cookies) == 0:
@@ -139,7 +140,7 @@ class FacebookRequest:
                 cookie_file = f'cookies/{self.cookies[cookie_index]}'
                 self.request_count += 1
 
-                print(f'Cookie Using: {cookie_file}')
+                print(f'Cookie Using: {self.cookies[cookie_index]}')
 
                 cookie_status = self.set_cookies(cookie_file)
 

@@ -13,6 +13,8 @@ from fb_scraper.profile_extractors import ProfileExtractors
 class FacebookScraper:
     def __init__(self, _request) -> None:
         self.facebook = _request
+        self.post_ids = []
+        self.post_urls = []
 
     def get_group_posts_by_group_id(self, group_id: str, start_url: str = None):
         try:
@@ -64,8 +66,9 @@ class FacebookScraper:
                         if link_content.get_text(strip=True) == 'Full Story':
                             group_post['post_id'] = extractors.post_id(link_content)
                             group_post['post_url'] = extractors.post_url(link_content)
+                            self.post_ids.append(group_post['post_id'])
 
-                    if 'post_url' in group_post and group_post['post_url'] is not None:
+                    if 'post_url' in group_post and group_post['post_url'] is not None and group_post['post_id'] not in self.post_ids:
                         # get the specific post html response from facebook
                         post_response = self.facebook.get(group_post['post_url'])
 
@@ -144,8 +147,9 @@ class FacebookScraper:
                         # link content that contains 'Full Story' text has post url
                         if link_content.get_text(strip=True) == 'Full Story':
                             page_post['post_url'] = FB_MBASIC_BASE_URL + extractors.post_url(link_content)
+                            self.post_urls.append(page_post['post_url'])
 
-                    if 'post_url' in page_post and page_post['post_url'] is not None:
+                    if 'post_url' in page_post and page_post['post_url'] is not None and page_post['post_url'] not in self.post_urls:
                         # get the specific post html response from facebook
                         post_response = self.facebook.get(page_post['post_url'])
 
