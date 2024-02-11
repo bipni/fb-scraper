@@ -224,6 +224,7 @@ class PageExtractors:
                     comment['commenter_url'] = self.commenter_url(div)
                     comment['comment_reaction_count'] = self.comment_reaction_count(div)
                     comment['replies'] = self.replies(div, post_id, comment['comment_id'])
+                    print(comment['comment_text'])
                     values.append(comment)
 
             return values

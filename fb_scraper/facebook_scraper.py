@@ -14,7 +14,6 @@ class FacebookScraper:
     def __init__(self, _request) -> None:
         self.facebook = _request
         self.post_ids = []
-        self.post_urls = []
 
     def get_group_posts_by_group_id(self, group_id: str, start_url: str = None):
         try:
@@ -148,7 +147,7 @@ class FacebookScraper:
                         if link_content.get_text(strip=True) == 'Full Story':
                             page_post['post_url'] = FB_MBASIC_BASE_URL + extractors.post_url(link_content)
 
-                    if 'post_url' in page_post and page_post['post_url'] is not None and page_post['post_url'] not in self.post_urls:
+                    if 'post_url' in page_post and page_post['post_url'] is not None:
                         # get the specific post html response from facebook
                         post_response = self.facebook.get(page_post['post_url'])
 
@@ -165,13 +164,16 @@ class FacebookScraper:
                         page_post['reaction_count'] = extractors.reaction_count(soup, story_id)
                         page_post['post_time'] = extractors.post_time(soup)
 
-                        # comment related data
-                        page_post['comments'] = extractors.comments(soup, story_id, page_post['post_id'])
+                        if page_post['post_id'] not in self.post_ids:
+                            # comment related data
+                            page_post['comments'] = extractors.comments(soup, story_id, page_post['post_id'])
+                        else:
+                            continue
                     else:
                         print('No post url found')
 
                     page_posts.append(page_post)
-                    self.post_urls.append(page_post['post_url'])
+                    self.post_ids.append(page_post['post_id'])
             else:
                 print('No new posts found')
 
