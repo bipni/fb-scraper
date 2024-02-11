@@ -170,7 +170,7 @@ class PageExtractors:
 
             next_comments = True
             comment_div = content.find('div', {'id': f'ufi_{story_id}'})
-            aggr_comment_div = content.find_all('div', {'id': f'ufi_{story_id}'})
+            aggr_comment_div = content.find('div', {'id': f'ufi_{story_id}'})
 
             comment_div = aggr_comment_div.find_all('div', {'id': re.compile(r'^\d+$')}) if aggr_comment_div else []
 
