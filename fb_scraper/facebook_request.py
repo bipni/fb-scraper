@@ -126,7 +126,7 @@ class FacebookRequest:
 
     def get(self, url, **kwargs):
         try:
-            interval = random.randint(0, 11)
+            interval = random.randint(2, 10)
             print(f'Waiting time for next request: {interval} seconds')
             time.sleep(interval)
 

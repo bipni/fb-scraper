@@ -185,8 +185,10 @@ class PageExtractors:
                 comment['replies'] = self.replies(div, post_id, comment['comment_id'])
                 values.append(comment)
 
+            next_comment_div = comment_divs
+
             while next_comments:
-                next_url_div = comment_divs.find('div', {'id': f'see_next_{story_id}'}) if comment_divs is not None else None
+                next_url_div = next_comment_div.find('div', {'id': f'see_next_{story_id}'}) if next_comment_div else None
 
                 if not next_url_div:
                     break
