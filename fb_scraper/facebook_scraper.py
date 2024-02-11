@@ -66,7 +66,6 @@ class FacebookScraper:
                         if link_content.get_text(strip=True) == 'Full Story':
                             group_post['post_id'] = extractors.post_id(link_content)
                             group_post['post_url'] = extractors.post_url(link_content)
-                            self.post_ids.append(group_post['post_id'])
 
                     if 'post_url' in group_post and group_post['post_url'] is not None and group_post['post_id'] not in self.post_ids:
                         # get the specific post html response from facebook
@@ -88,6 +87,7 @@ class FacebookScraper:
                         print('No post url found')
 
                     group_posts.append(group_post)
+                    self.post_ids.append(group_post['post_id'])
             else:
                 print('No new posts found')
 
@@ -147,7 +147,6 @@ class FacebookScraper:
                         # link content that contains 'Full Story' text has post url
                         if link_content.get_text(strip=True) == 'Full Story':
                             page_post['post_url'] = FB_MBASIC_BASE_URL + extractors.post_url(link_content)
-                            self.post_urls.append(page_post['post_url'])
 
                     if 'post_url' in page_post and page_post['post_url'] is not None and page_post['post_url'] not in self.post_urls:
                         # get the specific post html response from facebook
@@ -172,6 +171,7 @@ class FacebookScraper:
                         print('No post url found')
 
                     page_posts.append(page_post)
+                    self.post_urls.append(page_post['post_url'])
             else:
                 print('No new posts found')
 
