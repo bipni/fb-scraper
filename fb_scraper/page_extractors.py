@@ -169,7 +169,7 @@ class PageExtractors:
             values = []
 
             next_comments = True
-            comment_div = content.find('div', {'id': f'ufi_{story_id}'})
+            comment_div = content.find_all('div', {'id': f'ufi_{story_id}'})
 
             if comment_div:
                 for div in comment_div:
