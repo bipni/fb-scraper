@@ -166,6 +166,7 @@ class PageExtractors:
 
     def comments(self, content, story_id, post_id):
         try:
+            comment_count = 1
             values = []
 
             next_comments = True
@@ -174,6 +175,8 @@ class PageExtractors:
             comment_div = comment_divs.find_all('div', {'id': re.compile(r'^\d+$')}) if comment_divs else []
 
             for div in comment_div:
+                print(f'Comment Count: {comment_count}')
+                comment_count += 1
                 comment = {}
                 comment['comment_id'] = self.comment_id(div)
                 comment['comment_text'] = self.comment_text(div)
@@ -200,7 +203,8 @@ class PageExtractors:
                 else:
                     next_url_href = FB_MBASIC_BASE_URL + next_url_href
 
-                print('Getting Comments')
+                print(f'Comment Count: {comment_count}')
+                comment_count += 1
                 next_page_response = self.facebook.get(next_url_href)
                 soup = BeautifulSoup(next_page_response, 'html.parser')
                 next_comment_div = soup.find('div', {'id': f'ufi_{story_id}'})
