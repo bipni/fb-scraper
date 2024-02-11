@@ -146,7 +146,7 @@ class FacebookRequest:
 
             url = str(url)
 
-            response = self.session.get(url=url, **self.requests_kwargs, **kwargs)
+            response = self.session.get(url=url, **self.requests_kwargs)
 
             response.html.html = response.html.html.replace('<!--', '').replace('-->', '')
             response.raise_for_status()

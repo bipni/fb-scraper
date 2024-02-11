@@ -196,7 +196,7 @@ class PageExtractors:
                 aggr_comment_div.append(next_comment_div)
                 comment_div = next_comment_div
 
-            comment_div = aggr_comment_div.find_all('div', {'id': re.compile(r'^\d+$')})
+            comment_div = aggr_comment_div.find_all('div', {'id': re.compile(r'^\d+$')}) if aggr_comment_div else []
 
             for div in comment_div:
                 comment = {}
