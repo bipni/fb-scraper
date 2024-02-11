@@ -180,6 +180,7 @@ class PageExtractors:
                 comment = {}
                 comment['comment_id'] = self.comment_id(div)
                 comment['comment_text'] = self.comment_text(div)
+                print(f'comment text: {comment["comment_text"]} for post id: {post_id}')
                 comment['comment_time'] = self.comment_time(div)
                 comment['commenter_id'] = self.commenter_id(div)
                 comment['commenter_name'] = self.commenter_name(div)
@@ -218,13 +219,13 @@ class PageExtractors:
                     comment = {}
                     comment['comment_id'] = self.comment_id(div)
                     comment['comment_text'] = self.comment_text(div)
+                    print(f'comment text: {comment["comment_text"]} for post id: {post_id}')
                     comment['comment_time'] = self.comment_time(div)
                     comment['commenter_id'] = self.commenter_id(div)
                     comment['commenter_name'] = self.commenter_name(div)
                     comment['commenter_url'] = self.commenter_url(div)
                     comment['comment_reaction_count'] = self.comment_reaction_count(div)
                     comment['replies'] = self.replies(div, post_id, comment['comment_id'])
-                    print(comment['comment_text'])
                     values.append(comment)
 
             return values
@@ -361,6 +362,7 @@ class PageExtractors:
 
     def replies(self, content, post_id, comment_id):
         try:
+            print('Inside Replies')
             values = []
 
             reply_url_div_id = f'comment_replies_more_1:{post_id}_{comment_id}'
@@ -384,6 +386,7 @@ class PageExtractors:
                         if comment_id != div.get('id'):
                             reply['reply_id'] = self.comment_id(div)
                             reply['reply_text'] = self.comment_text(div)
+                            print(f'Reply Text: {reply["reply_text"]} for comment id: {comment_id}')
                             reply['reply_time'] = self.comment_time(div)
                             reply['replier_id'] = self.commenter_id(div)
                             reply['replier_name'] = self.commenter_name(div)
