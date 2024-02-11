@@ -170,7 +170,18 @@ class PageExtractors:
 
             next_comments = True
             comment_div = content.find('div', {'id': f'ufi_{story_id}'})
-            aggr_comment_div = content.find('div', {'id': f'ufi_{story_id}'})
+
+            for div in comment_div:
+                comment = {}
+                comment['comment_id'] = self.comment_id(div)
+                comment['comment_text'] = self.comment_text(div)
+                comment['comment_time'] = self.comment_time(div)
+                comment['commenter_id'] = self.commenter_id(div)
+                comment['commenter_name'] = self.commenter_name(div)
+                comment['commenter_url'] = self.commenter_url(div)
+                comment['comment_reaction_count'] = self.comment_reaction_count(div)
+                comment['replies'] = self.replies(div, post_id, comment['comment_id'])
+                values.append(comment)
 
             while next_comments:
                 next_url_div = comment_div.find('div', {'id': f'see_next_{story_id}'}) if comment_div is not None else None
@@ -193,22 +204,19 @@ class PageExtractors:
                 if not next_comment_div:
                     break
 
-                aggr_comment_div.append(next_comment_div)
-                comment_div = next_comment_div
+                comment_div = next_comment_div.find_all('div', {'id': re.compile(r'^\d+$')}) if next_comment_div else []
 
-            comment_div = aggr_comment_div.find_all('div', {'id': re.compile(r'^\d+$')}) if aggr_comment_div else []
-
-            for div in comment_div:
-                comment = {}
-                comment['comment_id'] = self.comment_id(div)
-                comment['comment_text'] = self.comment_text(div)
-                comment['comment_time'] = self.comment_time(div)
-                comment['commenter_id'] = self.commenter_id(div)
-                comment['commenter_name'] = self.commenter_name(div)
-                comment['commenter_url'] = self.commenter_url(div)
-                comment['comment_reaction_count'] = self.comment_reaction_count(div)
-                comment['replies'] = self.replies(div, post_id, comment['comment_id'])
-                values.append(comment)
+                for div in comment_div:
+                    comment = {}
+                    comment['comment_id'] = self.comment_id(div)
+                    comment['comment_text'] = self.comment_text(div)
+                    comment['comment_time'] = self.comment_time(div)
+                    comment['commenter_id'] = self.commenter_id(div)
+                    comment['commenter_name'] = self.commenter_name(div)
+                    comment['commenter_url'] = self.commenter_url(div)
+                    comment['comment_reaction_count'] = self.comment_reaction_count(div)
+                    comment['replies'] = self.replies(div, post_id, comment['comment_id'])
+                    values.append(comment)
 
             return values
         except Exception as error:
