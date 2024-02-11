@@ -175,18 +175,19 @@ class PageExtractors:
             comment_div = comment_divs.find_all('div', {'id': re.compile(r'^\d+$')}) if comment_divs else []
 
             for div in comment_div:
-                print(f'Comment Count: {comment_count}')
-                comment_count += 1
                 comment = {}
                 comment['comment_id'] = self.comment_id(div)
                 comment['comment_text'] = self.comment_text(div)
-                print(f'comment text: {comment["comment_text"]} for post id: {post_id}')
                 comment['comment_time'] = self.comment_time(div)
                 comment['commenter_id'] = self.commenter_id(div)
                 comment['commenter_name'] = self.commenter_name(div)
                 comment['commenter_url'] = self.commenter_url(div)
                 comment['comment_reaction_count'] = self.comment_reaction_count(div)
                 comment['replies'] = self.replies(div, post_id, comment['comment_id'])
+
+                print(f'Comment Count: {comment_count}')
+                comment_count += 1
+
                 values.append(comment)
 
             next_comment_div = comment_divs
@@ -204,8 +205,6 @@ class PageExtractors:
                 else:
                     next_url_href = FB_MBASIC_BASE_URL + next_url_href
 
-                print(f'Comment Count: {comment_count}')
-                comment_count += 1
                 next_page_response = self.facebook.get(next_url_href)
                 soup = BeautifulSoup(next_page_response, 'html.parser')
                 next_comment_div = soup.find('div', {'id': f'ufi_{story_id}'})
@@ -219,13 +218,16 @@ class PageExtractors:
                     comment = {}
                     comment['comment_id'] = self.comment_id(div)
                     comment['comment_text'] = self.comment_text(div)
-                    print(f'comment text: {comment["comment_text"]} for post id: {post_id}')
                     comment['comment_time'] = self.comment_time(div)
                     comment['commenter_id'] = self.commenter_id(div)
                     comment['commenter_name'] = self.commenter_name(div)
                     comment['commenter_url'] = self.commenter_url(div)
                     comment['comment_reaction_count'] = self.comment_reaction_count(div)
                     comment['replies'] = self.replies(div, post_id, comment['comment_id'])
+
+                    print(f'Comment Count: {comment_count}')
+                    comment_count += 1
+
                     values.append(comment)
 
             return values
@@ -362,7 +364,7 @@ class PageExtractors:
 
     def replies(self, content, post_id, comment_id):
         try:
-            print('Inside Replies')
+            reply_count = 1
             values = []
 
             reply_url_div_id = f'comment_replies_more_1:{post_id}_{comment_id}'
@@ -386,12 +388,14 @@ class PageExtractors:
                         if comment_id != div.get('id'):
                             reply['reply_id'] = self.comment_id(div)
                             reply['reply_text'] = self.comment_text(div)
-                            print(f'Reply Text: {reply["reply_text"]} for comment id: {comment_id}')
                             reply['reply_time'] = self.comment_time(div)
                             reply['replier_id'] = self.commenter_id(div)
                             reply['replier_name'] = self.commenter_name(div)
                             reply['replier_url'] = self.commenter_url(div)
                             reply['reply_reaction_count'] = self.comment_reaction_count(div)
+
+                            print(f'Reply Count: {reply_count}')
+                            reply_count += 1
                             values.append(reply)
 
             return values
