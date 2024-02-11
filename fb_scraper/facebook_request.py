@@ -128,6 +128,7 @@ class FacebookRequest:
                 raise RottenCookies('All Cookies are Rotten')
 
             scrape_type = kwargs.get('scrape_type', None)
+            print(scrape_type)
 
             if scrape_type != 'reply':
                 cookie_index = self.request_count % len(self.cookies)
