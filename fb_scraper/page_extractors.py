@@ -169,10 +169,9 @@ class PageExtractors:
             values = []
 
             next_comments = True
-            comment_div = content.find('div', {'id': f'ufi_{story_id}'})
-            aggr_comment_div = content.find('div', {'id': f'ufi_{story_id}'})
+            comment_divs = content.find('div', {'id': f'ufi_{story_id}'})
 
-            comment_div = aggr_comment_div.find_all('div', {'id': re.compile(r'^\d+$')}) if aggr_comment_div else []
+            comment_div = comment_divs.find_all('div', {'id': re.compile(r'^\d+$')}) if comment_divs else []
 
             for div in comment_div:
                 comment = {}
@@ -187,7 +186,7 @@ class PageExtractors:
                 values.append(comment)
 
             while next_comments:
-                next_url_div = comment_div.find('div', {'id': f'see_next_{story_id}'}) if comment_div is not None else None
+                next_url_div = comment_divs.find('div', {'id': f'see_next_{story_id}'}) if comment_divs is not None else None
 
                 if not next_url_div:
                     break
@@ -207,7 +206,7 @@ class PageExtractors:
                 if not next_comment_div:
                     break
 
-                comment_div = next_comment_div.find_all('div', {'id': re.compile(r'^\d+$')}) if aggr_comment_div else []
+                comment_div = next_comment_div.find_all('div', {'id': re.compile(r'^\d+$')}) if next_comment_div else []
 
                 for div in comment_div:
                     comment = {}
