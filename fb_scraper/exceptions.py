@@ -28,3 +28,7 @@ class UnexpectedResponse(Exception):
 
 class PrivateGroupError(Exception):
     '''User doesn't belong to this group'''
+
+
+class RottenCookies(Exception):
+    '''No cookies are available'''

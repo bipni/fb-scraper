@@ -1,12 +1,10 @@
-import random
 import re
-import time
 
 from bs4 import BeautifulSoup
 from errorify import errorify
 
 from fb_scraper.constants import FB_MBASIC_BASE_URL
-from fb_scraper.exceptions import PrivateGroupError
+from fb_scraper.exceptions import PrivateGroupError, RottenCookies
 from fb_scraper.group_extractors import GroupExtractors
 from fb_scraper.page_extractors import PageExtractors
 from fb_scraper.profile_extractors import ProfileExtractors
@@ -26,8 +24,6 @@ class FacebookScraper:
                 url = start_url
 
             # get the html response from facebook
-            random_number = random.randint(2, 6)
-            time.sleep(random_number)
             page_response = self.facebook.get(url)
 
             # parse html
@@ -98,8 +94,12 @@ class FacebookScraper:
             }
 
             return data
+        except RottenCookies as error:
+            print(errorify(error))
+            raise RottenCookies('All Cookies are Rotten') from error
         except Exception as error:
             print(errorify(error))
+            return None
 
     def get_page_posts_by_page_id(self, page_id: str, start_url: str = None):
         try:
@@ -118,8 +118,6 @@ class FacebookScraper:
                 url = start_url
 
             # get the html response from facebook
-            random_number = random.randint(2, 6)
-            time.sleep(random_number)
             page_response = self.facebook.get(url)
 
             # parse html
@@ -179,8 +177,12 @@ class FacebookScraper:
             }
 
             return data
+        except RottenCookies as error:
+            print(errorify(error))
+            raise RottenCookies('All Cookies are Rotten') from error
         except Exception as error:
             print(errorify(error))
+            return None
 
     def get_profile(self, profile_id: str):
         try:
@@ -231,5 +233,8 @@ class FacebookScraper:
             profile_info['favorite_quote'] = extractors.favorite_quote(soup)
 
             return profile_info
+        except RottenCookies as error:
+            print(errorify(error))
+            raise RottenCookies('All Cookies are Rotten') from error
         except Exception as error:
             print(errorify(error))
