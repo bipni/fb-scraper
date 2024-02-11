@@ -127,18 +127,21 @@ class FacebookRequest:
             if len(self.cookies) == 0:
                 raise RottenCookies('All Cookies are Rotten')
 
-            cookie_index = self.request_count % len(self.cookies)
-            cookie_file = f'cookies/{self.cookies[cookie_index]}'
-            self.request_count += 1
+            scrape_type = kwargs.get('scrape_type', None)
 
-            print(f'Cookie Using: {cookie_file}')
+            if scrape_type != 'reply':
+                cookie_index = self.request_count % len(self.cookies)
+                cookie_file = f'cookies/{self.cookies[cookie_index]}'
+                self.request_count += 1
 
-            cookie_status = self.set_cookies(cookie_file)
+                print(f'Cookie Using: {cookie_file}')
 
-            if not cookie_status:
-                print(f'Removing Cookie: {self.cookies[cookie_index]}')
-                self.cookies.pop(cookie_index)
-                self.get(url, **kwargs)
+                cookie_status = self.set_cookies(cookie_file)
+
+                if not cookie_status:
+                    print(f'Removing Cookie: {self.cookies[cookie_index]}')
+                    self.cookies.pop(cookie_index)
+                    self.get(url, **kwargs)
 
             url = str(url)
 

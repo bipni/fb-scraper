@@ -355,7 +355,7 @@ class PageExtractors:
 
                 if reply_url:
                     print('Getting Replies')
-                    replies_response = self.facebook.get(FB_MBASIC_BASE_URL + reply_url)
+                    replies_response = self.facebook.get(FB_MBASIC_BASE_URL + reply_url, {'scrape_type': 'reply'})
 
                     soup = BeautifulSoup(replies_response, 'html.parser')
 
