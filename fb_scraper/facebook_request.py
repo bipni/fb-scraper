@@ -45,6 +45,7 @@ class FacebookRequest:
         self.session = session
         self.requests_kwargs = requests_kwargs
         self.request_count = 0
+        self.banned_cookies = []
         self._warning()
 
     def _warning(self):
@@ -144,6 +145,7 @@ class FacebookRequest:
                 cookie_file = f'cookies/{self.cookies[cookie_index]}'
                 self.request_count += 1
 
+                print(f'Invalid Cookie List: {self.banned_cookies}')
                 print(f'Cookie Using: {self.cookies[cookie_index]}')
 
                 cookie_status = self.set_cookies(cookie_file)
@@ -174,6 +176,7 @@ class FacebookRequest:
                         raise TemporarilyBanned(title.text)
                     except TemporarilyBanned as e:
                         print(errorify(e))
+                        self.banned_cookies.append(self.cookies[cookie_index])
                         print(f'Removing Cookie: {self.cookies[cookie_index]}')
                         self.cookies.pop(cookie_index)
                         self.get(url, **kwargs)
@@ -183,6 +186,7 @@ class FacebookRequest:
                         raise AccountDisabled("Your Account Has Been Disabled")
                     except AccountDisabled as e:
                         print(errorify(e))
+                        self.banned_cookies.append(self.cookies[cookie_index])
                         print(f'Removing Cookie: {self.cookies[cookie_index]}')
                         self.cookies.pop(cookie_index)
                         self.get(url, **kwargs)
@@ -192,6 +196,7 @@ class FacebookRequest:
                         raise AccountDisabled("Your Account Has Been Locked")
                     except AccountDisabled as e:
                         print(errorify(e))
+                        self.banned_cookies.append(self.cookies[cookie_index])
                         print(f'Removing Cookie: {self.cookies[cookie_index]}')
                         self.cookies.pop(cookie_index)
                         self.get(url, **kwargs)
@@ -201,6 +206,7 @@ class FacebookRequest:
                         raise LoginRequired("A login (cookies) is required to see this page")
                     except LoginRequired as e:
                         print(errorify(e))
+                        self.banned_cookies.append(self.cookies[cookie_index])
                         print(f'Removing Cookie: {self.cookies[cookie_index]}')
                         self.cookies.pop(cookie_index)
                         self.get(url, **kwargs)
