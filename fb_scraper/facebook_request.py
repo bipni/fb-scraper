@@ -151,6 +151,7 @@ class FacebookRequest:
                 cookie_status = self.set_cookies(cookie_file)
 
                 if not cookie_status:
+                    self.banned_cookies.append(self.cookies[cookie_index])
                     print(f'Removing Cookie: {self.cookies[cookie_index]}')
                     self.cookies.pop(cookie_index)
                     self.get(url, **kwargs)
