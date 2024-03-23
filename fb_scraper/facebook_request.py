@@ -79,12 +79,16 @@ class FacebookRequest:
 
             self.session.cookies.update(cookies)
 
-            if not self.is_logged_in():
-                try:
-                    raise InvalidCookies('Cookies are not valid')
-                except InvalidCookies as e:
-                    print(errorify(e))
-                    return False
+            try:
+                if not self.is_logged_in():
+                    try:
+                        raise InvalidCookies('Cookies are not valid')
+                    except InvalidCookies as e:
+                        print(errorify(e))
+                        return False
+            except Exception as e:
+                print(errorify(e))
+                return False
 
             return True
 
