@@ -171,6 +171,8 @@ class GroupExtractors:
             aggr_comment_div = content.find('div', {'id': f'ufi_{post_id}'})
 
             while next_comments:
+                print('Getting Comments')
+
                 next_url_div = comment_div.find('div', {'id': f'see_next_{post_id}'})
 
                 if not next_url_div:
@@ -181,7 +183,6 @@ class GroupExtractors:
                 if not next_url_href:
                     break
 
-                print('Getting Comments')
                 next_page_response = self.facebook.get(next_url_href)
                 soup = BeautifulSoup(next_page_response, 'html.parser')
                 next_comment_div = soup.find('div', {'id': f'ufi_{post_id}'})
