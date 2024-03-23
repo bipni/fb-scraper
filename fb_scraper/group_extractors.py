@@ -351,7 +351,8 @@ class GroupExtractors:
 
                 if reply_url:
                     print('Getting Replies')
-                    replies_response = self.facebook.get(FB_MBASIC_BASE_URL + reply_url)
+                    scrape_type = {'scrape_type': 'reply'}
+                    replies_response = self.facebook.get(FB_MBASIC_BASE_URL + reply_url, **scrape_type)
 
                     soup = BeautifulSoup(replies_response, 'html.parser')
 

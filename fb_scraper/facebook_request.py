@@ -1,5 +1,5 @@
-import random
-import time
+# import random
+# import time
 import warnings
 
 from errorify import errorify
@@ -126,9 +126,9 @@ class FacebookRequest:
 
     def get(self, url, **kwargs):
         try:
-            interval = random.randint(2, 10)
-            print(f'Waiting time for next request: {interval} seconds')
-            time.sleep(interval)
+            # interval = random.randint(2, 10)
+            # print(f'Waiting time for next request: {interval} seconds')
+            # time.sleep(interval)
 
             if len(self.cookies) == 0:
                 raise RottenCookies('All Cookies are Rotten')
