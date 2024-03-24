@@ -82,11 +82,11 @@ class FacebookScraper:
 
                         # comment related data
                         group_post['comments'] = extractors.comments(soup, group_post['post_id'])
+
+                        group_posts.append(group_post)
+                        self.post_ids.append(group_post['post_id'])
                     else:
                         print('No post url found')
-
-                    group_posts.append(group_post)
-                    self.post_ids.append(group_post['post_id'])
             else:
                 print('No new posts found')
 
